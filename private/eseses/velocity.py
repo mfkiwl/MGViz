@@ -1,5 +1,5 @@
 import csv
-import urllib
+import urllib.request
 import subprocess
 import sys
 import os
@@ -25,14 +25,14 @@ if os.path.exists(src+'.json'):
 
 url = 'http://geoapp02.ucsd.edu:8080/gpseDB/vel?op=getSingleVelNEUFile&coord='+src+'&site_list=all&out=GMT&fil=unf'
 try:
-    reader = csv.reader(urllib.urlopen(url), delimiter=' ')
+    reader = csv.reader(urllib.request.urlopen(url).read().decode('utf-8').splitlines(), delimiter=' ')
 except Exception as e:
     if os.path.exists(src+'.json'):
         with open(src+'.json', 'r') as out:
             print(out.read())
     sys.exit()
 
-with open(src+'.csv', 'wb') as csvfile:
+with open(src+'.csv', 'w') as csvfile:
     wtr = csv.writer( csvfile )
     wtr.writerow( ('site', 'x', 'y', 'e_vel', 'n_vel', 'u_vel' ))
     try:
