@@ -7,6 +7,7 @@ from datetime import datetime
 import geopandas as gpd
 
 json = 'Missions/MGViz/Layers/Sites.json'
+state = None
 
 # Get args
 if len(sys.argv) > 1:
@@ -22,9 +23,10 @@ if os.path.exists(json):
             print(out.read())
         sys.exit()
 
-url = 'http://geoapp01.ucsd.edu:8080/gpseDB/psite?op=getNeuConversionSiteList'
+url = 'http://geoadm03.ucsd.edu/add-sites-manager/gpseDB_psite?op=getNeuConversionSiteList'
+
 try:
-    reader = csv.reader(urllib.request.urlopen(url).read().decode('utf-8').splitlines(), delimiter=' ')
+    reader = csv.reader(urllib.request.urlopen(url, timeout=5).read().decode('utf-8').splitlines(), delimiter=' ')
 except Exception as e:   # On error, print the saved version and exit
     if os.path.exists(json):
         with open(json, 'r') as out:
